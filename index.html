@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your AI Agents Are Running Without a Leash | Kynara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1714;
+    --ink-muted: #5a5450;
+    --ink-faint: #9a9490;
+    --paper: #faf8f5;
+    --paper-warm: #f4f0ea;
+    --accent: #c0392b;
+    --accent-soft: #e8d5d3;
+    --gold: #b8860b;
+    --gold-light: #f5e6b0;
+    --rule: #d8d0c8;
+    --code-bg: #f0ece6;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--rule);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(250,248,245,0.96);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+  }
+
+  .header-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .header-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 2rem 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .category-pill {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    margin-bottom: 28px;
+    border-radius: 2px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.12;
+    color: var(--ink);
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--ink-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 36px;
+    max-width: 640px;
+  }
+
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: white;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .byline-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .byline-name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .byline-date {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── READING TIME STRIP ── */
+  .reading-strip {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 14px 2rem;
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .reading-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .reading-chip span { color: var(--ink-muted); }
+
+  /* ── ARTICLE BODY ── */
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 2rem 100px;
+  }
+
+  article p {
+    margin-bottom: 1.6em;
+    color: var(--ink);
+  }
+
+  article p:first-of-type::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.2em;
+    font-weight: 900;
+    float: left;
+    line-height: 0.78;
+    padding-right: 10px;
+    padding-top: 6px;
+    color: var(--accent);
+  }
+
+  /* ── HEADINGS ── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 2.4em 0 0.8em;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 1.8em 0 0.6em;
+    color: var(--ink);
+  }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    margin: 2.4em -40px;
+    padding: 2rem 2.4rem;
+    border-left: 5px solid var(--accent);
+    background: var(--paper-warm);
+    position: relative;
+  }
+
+  .pull-quote::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--accent-soft);
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    line-height: 1;
+  }
+
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 0 !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CALLOUT BOX ── */
+  .callout {
+    margin: 2.4em 0;
+    padding: 1.6rem 2rem;
+    background: var(--gold-light);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .callout p {
+    font-size: 0.95rem;
+    margin-bottom: 0 !important;
+    color: var(--ink);
+  }
+
+  /* ── CODE / TECHNICAL ── */
+  .code-block {
+    margin: 2em 0;
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .code-block-header {
+    padding: 8px 16px;
+    background: var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .code-block pre {
+    padding: 1.2rem 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 2.8em 0;
+    color: var(--rule);
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .section-divider span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+  }
+
+  /* ── NUMBERED LIST ── */
+  .threat-list {
+    margin: 1.6em 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: threat;
+  }
+
+  .threat-list li {
+    counter-increment: threat;
+    padding: 1rem 1rem 1rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    font-size: 0.95rem;
+  }
+
+  .threat-list li:last-child { border-bottom: none; }
+
+  .threat-list li::before {
+    content: counter(threat, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    width: 2.8rem;
+    text-align: center;
+  }
+
+  .threat-list li strong {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+  }
+
+  /* ── FEATURE GRID ── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 2em 0;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .feature-card {
+    background: var(--paper);
+    padding: 1.4rem 1.6rem;
+  }
+
+  .feature-card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .feature-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+
+  .feature-card p {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    margin-bottom: 0 !important;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.6em 0;
+    font-size: 0.85rem;
+  }
+
+  .compare-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    text-align: left;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  .compare-table th:first-child { border-radius: 3px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 3px 0 0; }
+
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: var(--paper-warm); }
+
+  .compare-table td:first-child {
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .yes { color: #2d6a2d; font-weight: 600; }
+  .no { color: var(--ink-faint); }
+  .partial { color: var(--gold); font-weight: 600; }
+
+  /* ── CTA ── */
+  .cta-block {
+    margin: 3em 0 1em;
+    padding: 2.4rem 2.8rem;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-block::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.12;
+  }
+
+  .cta-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--paper);
+    margin-bottom: 12px;
+    margin-top: 0;
+  }
+
+  .cta-block p {
+    font-size: 0.9rem;
+    color: rgba(250,248,245,0.72);
+    margin-bottom: 1.4em !important;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 12px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .cta-button:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 32px 2rem;
+    text-align: center;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .footer-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    margin-top: 8px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    height: 2px;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.1s;
+    z-index: 200;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .pull-quote { margin: 2em 0; }
+    .feature-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 2rem; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero, article > * {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero { animation-delay: 0.1s; }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header>
+  <a class="header-brand" href="#">Kynara</a>
+  <span class="header-meta">AI Agent Security · Enterprise</span>
+</header>
+
+<div class="hero">
+  <span class="category-pill">AI Infrastructure</span>
+
+  <h1>Your AI Agents Are Running<br><em>Without a Leash</em></h1>
+
+  <p class="subtitle">
+    The enterprise has spent decades building access control for humans. Now autonomous AI agents are executing code, sending emails, and modifying databases — and most organizations have no idea what permissions they actually have.
+  </p>
+
+  <div class="byline">
+    <div class="avatar">K</div>
+    <div class="byline-text">
+      <div class="byline-name">Kynara Research Team</div>
+      <div class="byline-date">May 27, 2026 &nbsp;·&nbsp; 9 min read</div>
+    </div>
+  </div>
+</div>
+
+<div class="reading-strip">
+  <div class="reading-chip">🔒 <span>Security</span></div>
+  <div class="reading-chip">🤖 <span>AI Agents</span></div>
+  <div class="reading-chip">🏢 <span>Enterprise</span></div>
+  <div class="reading-chip">⚙️ <span>Governance</span></div>
+</div>
+
+<article>
+
+  <p>
+    Imagine hiring a brilliant contractor who can work 24 hours a day, never takes breaks, and can execute tasks across every system in your company — simultaneously. Now imagine you gave that contractor a master key on day one and never asked for it back.
+  </p>
+
+  <p>
+    That's the situation most enterprises find themselves in today with AI agents. Over the past two years, autonomous AI systems have moved from experimental prototypes to production infrastructure. They book meetings, triage customer tickets, execute code deployments, query databases, and send emails on behalf of entire departments. And in nearly every case, they do it with permissions that would make a seasoned security engineer wince.
+  </p>
+
+  <div class="pull-quote">
+    <p>The biggest security gap in enterprise AI isn't jailbreaks or prompt injection — it's the quiet, authorized over-permissioning that happens when nobody is watching.</p>
+  </div>
+
+  <h2>The Permission Problem Nobody Is Talking About</h2>
+
+  <p>
+    Access control is a solved problem for humans. Role-based access control (RBAC), the principle of least privilege, OAuth scopes, audit logs — decades of security engineering have produced mature frameworks for managing what people can see, touch, and change inside an organization.
+  </p>
+
+  <p>
+    AI agents break every assumption those frameworks were built on.
+  </p>
+
+  <p>
+    A human analyst at a financial services firm has access to the specific datasets relevant to their role. When they leave the company, their access is revoked. If they access something unusual, behavioral analytics flags it. The chain of accountability is clear.
+  </p>
+
+  <p>
+    An AI agent serving that same analyst can easily end up with credentials that span Salesforce, Databricks, the internal ticketing system, and a production API — because each integration was added incrementally by different teams, each with a "just make it work" mentality. Nobody granted the agent that total access in a single deliberate act. It accumulated.
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">The Core Problem</div>
+    <p>Because AI agent credentials are long-lived service accounts rather than human sessions, they don't expire, don't trigger anomaly detection, and often aren't covered by standard offboarding processes. When the agent is retired, the service account frequently isn't.</p>
+  </div>
+
+  <h2>Five Ways This Goes Wrong</h2>
+
+  <ul class="threat-list">
+    <li>
+      <strong>Privilege Accumulation</strong>
+      Each new capability added to an agent brings new credentials. Over time, a single agent may hold access to a dozen systems — far more than any individual human in the organization.
+    </li>
+    <li>
+      <strong>Authorization Bypass</strong>
+      A user with read-only access to a database can ask an agent — which has write access — to make changes on their behalf. The action is logged under the agent's identity, not the user's, erasing accountability.
+    </li>
+    <li>
+      <strong>Lateral Movement via Agent Networks</strong>
+      Multi-agent systems, where specialized agents delegate to sub-agents, can create trust chains that bypass security boundaries. An agent trusted by Agent A is implicitly trusted by everything Agent A can reach.
+    </li>
+    <li>
+      <strong>Abandoned Credentials</strong>
+      When a project ends or an agent is deprecated, the OAuth grants, API keys, and service accounts it used often remain active indefinitely — dormant attack surfaces waiting to be discovered.
+    </li>
+    <li>
+      <strong>Prompt Injection Privilege Escalation</strong>
+      Malicious instructions embedded in content an agent reads — emails, documents, web pages — can cause it to take actions using its existing permissions that its operators never intended.
+    </li>
+  </ul>
+
+  <div class="section-divider"><span>§</span></div>
+
+  <h2>Why Traditional IAM Isn't Enough</h2>
+
+  <p>
+    The natural response from many security teams is: "We already have identity and access management. We'll just add the agents to our existing system."
+  </p>
+
+  <p>
+    This approach fails for three structural reasons.
+  </p>
+
+  <p>
+    First, <strong>agents aren't users.</strong> IAM systems are designed around human-initiated sessions with predictable patterns. Agents initiate thousands of actions per minute, across arbitrary time windows, with no natural session boundary. Alert thresholds calibrated for humans generate either constant false positives or complete blindness when applied to agents.
+  </p>
+
+  <p>
+    Second, <strong>agents aren't services.</strong> Traditional service accounts are static — a microservice calls the same three API endpoints forever. Agents are dynamic; the same agent might send an email one moment and query financial data the next. Static permission models can't express "allow this capability only in this context."
+  </p>
+
+  <p>
+    Third, <strong>agents act on behalf of humans — but aren't those humans.</strong> When an agent executes an action on a user's behalf, the effective permissions should be the intersection of the agent's permissions and the user's permissions, not the union. Most systems default to the union, meaning an agent serving a low-privilege user can still exercise its full high-privilege credential set.
+  </p>
+
+  <div class="code-block">
+    <div class="code-block-header">The Authorization Gap — Conceptual Model</div>
+    <pre>
+Traditional model:
+  if user.can(action): allow()
+
+What agents actually do:
+  if agent.can(action):
+    allow()  ← user's permissions ignored entirely
+
+What we actually need:
+  if agent.can(action) AND user.can(action):
+    allow()  ← intersection, not union
+    </pre>
+  </div>
+
+  <h2>Introducing a Better Model: Agent-Native Authorization</h2>
+
+  <p>
+    Solving the AI agent permission problem requires rethinking authorization from first principles — not bolting agent identities onto systems built for people.
+  </p>
+
+  <p>
+    The key insight is that agents need a governance layer that understands their unique characteristics: they act on behalf of delegating humans, they operate across multiple systems simultaneously, they can be composed into hierarchies, and they should earn expanded trust through demonstrated behavior rather than being granted it upfront.
+  </p>
+
+  <p>
+    This is what Kynara is built to provide.
+  </p>
+
+  <h2>How Kynara Works</h2>
+
+  <p>
+    Kynara is an agent authorization platform designed for the reality of modern AI deployments. Rather than asking security teams to retrofit human-centric IAM tools, it introduces a model that treats agents as a first-class identity type — with capabilities tailored to how agents actually operate.
+  </p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-card-icon">🏷️</div>
+      <h4>Agent Registry & Identity</h4>
+      <p>Every agent in your organization gets a verified identity with defined capabilities, owning teams, and trust level — not just a service account credential.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">🎭</div>
+      <h4>Role-Based Agent Access</h4>
+      <p>Roles define what an agent can do across which systems. Roles are composable, time-bound, and can be scoped to specific tenants, projects, or user contexts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">🧑‍⚖️</div>
+      <h4>Human-in-the-Loop Approvals</h4>
+      <p>High-stakes actions trigger approval workflows to human reviewers before execution — without blocking the entire agent. Selective, context-aware oversight.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">🔍</div>
+      <h4>Immutable Audit Trail</h4>
+      <p>Every permission check, delegation, and approval is logged with full context — who requested it, which agent executed it, on whose behalf, and why it was allowed.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">🌐</div>
+      <h4>Multi-Tenant Architecture</h4>
+      <p>Enterprise-grade tenant isolation ensures that agents serving one customer or business unit cannot touch resources belonging to another, enforced at the authorization layer.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card-icon">⚡</div>
+      <h4>Policy-as-Code</h4>
+      <p>Authorization rules are versioned, reviewable, and deployable like any other infrastructure. Security teams and engineering teams work in the same workflow.</p>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>§</span></div>
+
+  <h2>Kynara vs. The Alternatives</h2>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Capability</th>
+        <th>Traditional IAM</th>
+        <th>DIY RBAC</th>
+        <th>Kynara</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Agent-native identity model</td>
+        <td class="no">✗</td>
+        <td class="partial">Partial</td>
+        <td class="yes">✓</td>
+      </tr>
+      <tr>
+        <td>User-agent permission intersection</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="yes">✓</td>
+      </tr>
+      <tr>
+        <td>Human-in-the-loop approval flows</td>
+        <td class="no">✗</td>
+        <td class="partial">Custom build required</td>
+        <td class="yes">✓</td>
+      </tr>
+      <tr>
+        <td>Multi-agent trust hierarchy</td>
+        <td class="no">✗</td>
+        <td class="no">✗</td>
+        <td class="yes">✓</td>
+      </tr>
+      <tr>
+        <td>Time-bound & context-scoped permissions</td>
+        <td class="partial">Limited</td>
+        <td class="partial">Possible, complex</td>
+        <td class="yes">✓</td>
+      </tr>
+      <tr>
+        <td>Policy-as-code with version control</td>
+        <td class="partial">Some tools</td>
+        <td class="partial">Varies</td>
+        <td class="yes">✓</td>
+      </tr>
+      <tr>
+        <td>Immutable audit trail per agent action</td>
+        <td class="partial">User-level only</td>
+        <td class="no">Build it yourself</td>
+        <td class="yes">✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The Stakes Are Rising Fast</h2>
+
+  <p>
+    The regulatory environment is beginning to catch up. The EU AI Act's provisions on high-risk AI systems will increasingly touch autonomous agents used in financial services, healthcare, and critical infrastructure. Organizations facing HIPAA, SOC 2, or emerging agentic AI frameworks will need to demonstrate not just that their agents are capable — but that they are controllable.
+  </p>
+
+  <p>
+    "Controllable" means something specific: you can answer the question "what could this agent have done, and what did it actually do?" with precision. That answer requires the kind of authorization and audit infrastructure that Kynara provides.
+  </p>
+
+  <div class="pull-quote">
+    <p>Every enterprise AI deployment is an implicit bet that your agents will never be compromised, never behave unexpectedly, and never be used to escalate privileges they shouldn't have. Kynara is for organizations that don't want to make that bet.</p>
+  </div>
+
+  <h2>Getting Started</h2>
+
+  <p>
+    Kynara is built to integrate with the frameworks and identity providers your organization already uses. Whether you're running LangGraph, AutoGen, CrewAI, or custom orchestration — and whether your identity backbone is Okta, Azure AD, or a homegrown system — the authorization layer drops in without requiring a rewrite.
+  </p>
+
+  <p>
+    The typical path to production for enterprise teams looks like this: start by registering your most sensitive agent — the one with access to the most systems — and wrapping its permission checks through Kynara. Within a week, you'll have visibility into its access patterns you've never had before. Expand from there.
+  </p>
+
+  <p>
+    The hardest part isn't the technology. It's the realization that the leash has been missing all along.
+  </p>
+
+  <div class="cta-block">
+    <h3>Ready to put your agents on a leash?</h3>
+    <p>Kynara gives enterprise teams the visibility, control, and audit trail they need to deploy AI agents safely at scale. Built for the reality of how agents actually work.</p>
+    <a class="cta-button" href="https://kynaraai.com" target="_blank">Explore Kynara →</a>
+  </div>
+
+</article>
+
+<footer>
+  <div class="footer-brand">Kynara</div>
+  <div class="footer-note">AI Agent Permission Intelligence · kynaraai.com</div>
+</footer>
+
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+  });
+</script>
+
+</body>
+</html>
